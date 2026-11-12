@@ -1,0 +1,43 @@
+{
+  "name": "galley",
+  "version": "1.0.0",
+  "description": "A paragraph typesetting engine: Knuth-Plass optimal line breaking, Liang hyphenation and hanging punctuation, with no dependencies.",
+  "type": "module",
+  "license": "MIT",
+  "author": "pMag11-alt",
+  "homepage": "https://pmag11-alt.github.io/galley/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pMag11-alt/galley.git"
+  },
+  "keywords": [
+    "typography",
+    "typesetting",
+    "knuth-plass",
+    "line-breaking",
+    "hyphenation",
+    "justification"
+  ],
+  "bin": {
+    "galley": "bin/galley.ts"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc",
+    "cli": "node bin/galley.ts"
+  },
+  "devDependencies": {
+    "@fontsource/eb-garamond": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@types/node": "^26.6.6",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.7",
+    "vitest": "^5.1.0"
+  }
+}

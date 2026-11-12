@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Galley · paragraphs set the way TeX sets them</title>
+    <meta
+      name="description"
+      content="A paragraph typesetting engine: Knuth–Plass optimal line breaking, Liang hyphenation and hanging punctuation, compared live against the greedy algorithm browsers use."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23b4371f'/%3E%3Ctext x='16' y='24' font-family='Georgia,serif' font-size='24' text-anchor='middle' fill='%23f4efe6'%3E%C2%B6%3C/text%3E%3C/svg%3E"
+    />
+  </head>
+  <body>
+    <header class="masthead">
+      <div class="bar">
+        <span class="wordmark">Galley</span>
+        <a href="https://github.com/pMag11-alt/galley">Source</a>
+      </div>
+      <h1>The same words, <em>set twice.</em></h1>
+      <p class="lede">
+        A browser fills a line, breaks it, and never looks back. Galley reads the whole paragraph
+        first, the way TeX does, and chooses the breaks that leave the spacing most even. Drag the
+        edge of either column and watch them disagree.
+      </p>
+    </header>
+
+    <section class="controls" aria-label="Settings">
+      <div class="group">
+        <label for="text">Text</label>
+        <select id="text">
+          <option value="frog">The Frog King · Grimm</option>
+          <option value="whale">Moby-Dick · Melville</option>
+          <option value="bank">The Tangled Bank · Darwin</option>
+          <option value="own">Your own…</option>
+        </select>
+      </div>
+      <div class="group">
+        <label for="measure">Measure <output id="measure-out"></output></label>
+        <input id="measure" type="range" min="170" max="560" step="1" />
+      </div>
+      <div class="group">
+        <label for="size">Size <output id="size-out"></output></label>
+        <input id="size" type="range" min="14" max="26" step="1" />
+      </div>
+      <div class="group">
+        <span class="label" id="shape-label">Shape</span>
+        <div class="segmented" role="group" aria-labelledby="shape-label" id="shape">
+          <button type="button" data-value="block">Column</button>
+          <button type="button" data-value="dropcap">Drop cap</button>
+          <button type="button" data-value="circle">Circle</button>
+        </div>
+      </div>
+      <div class="group">
+        <span class="label" id="fit-label">Total-fit uses</span>
+        <div class="segmented" role="group" aria-labelledby="fit-label" id="features">
+          <button type="button" data-value="hyphenate">Hyphens</button>
+          <button type="button" data-value="hang">Hanging punctuation</button>
+        </div>
+      </div>
+      <div class="group">
+        <span class="label" id="loose-label">Looseness</span>
+        <div class="segmented" role="group" aria-labelledby="loose-label" id="looseness">
+          <button type="button" data-value="-1" title="Try for one line fewer">−1</button>
+          <button type="button" data-value="0" title="The optimal number of lines">0</button>
+          <button type="button" data-value="1" title="Try for one line more">+1</button>
+        </div>
+      </div>
+      <div class="group">
+        <span class="label" id="show-label">Reveal</span>
+        <div class="segmented" role="group" aria-labelledby="show-label" id="overlays">
+          <button type="button" data-value="spacing" title="Tint each word space by how far it was stretched or squeezed">Spacing</button>
+          <button type="button" data-value="rivers" title="Trace wide spaces that line up down the page">Rivers</button>
+          <button type="button" data-value="ratios" title="Print each line's adjustment ratio in the margin">Ratios</button>
+          <button type="button" data-value="margins" title="Draw the edges of the measure">Margins</button>
+        </div>
+      </div>
+      <textarea id="custom" rows="5" hidden spellcheck="false" aria-label="Your own text"></textarea>
+    </section>
+
+    <main class="specimen" id="specimen">
+      <figure class="column" id="first">
+        <figcaption>
+          <h2>First-fit</h2>
+          <p>One line at a time. What every browser does.</p>
+        </figcaption>
+        <div class="stage"><div class="sheet"></div></div>
+        <dl class="ledger"></dl>
+      </figure>
+      <figure class="column" id="total">
+        <figcaption>
+          <h2>Total-fit</h2>
+          <p>The whole paragraph at once. Knuth &amp; Plass, 1981.</p>
+        </figcaption>
+        <div class="stage"><div class="sheet"></div></div>
+        <dl class="ledger"></dl>
+      </figure>
+    </main>
+
+    <section class="notes">
+      <article>
+        <h3>Boxes, glue, penalties</h3>
+        <p>
+          A paragraph becomes a list of three things. Boxes are words, and are rigid. Glue is the
+          space between them, which may stretch or shrink within limits. Penalties mark places a
+          line could end, and what it would cost: a hyphen is allowed, but not free.
+        </p>
+      </article>
+      <article>
+        <h3>A shortest path</h3>
+        <p>
+          Every possible line is scored by how far its glue must move from rest, cubed, so one
+          badly spaced line costs more than several slightly imperfect ones. The best paragraph is
+          then the cheapest route from the first word to the last, found by dynamic programming
+          in close to linear time.
+        </p>
+      </article>
+      <article>
+        <h3>Small courtesies</h3>
+        <p>
+          Hyphenation follows Liang’s patterns, as TeX’s does. Two hyphenated lines in a row are
+          discouraged, as is a tight line beside a loose one. Full stops, commas and quotation
+          marks hang slightly into the margin, so the edge of the text looks straight rather than
+          merely being straight.
+        </p>
+      </article>
+    </section>
+
+    <footer>
+      <p>
+        Texts are in the public domain. Set in EB Garamond and IBM Plex Mono, both under the SIL
+        Open Font License. The engine has no dependencies.
+      </p>
+    </footer>
+    <script type="module" src="/src/demo/main.ts"></script>
+  </body>
+</html>
